@@ -1,0 +1,339 @@
+﻿■ 버전관리의 본질
+
+start "" "%PROGRAMFILES%\Git\bin\sh.exe" --login		# cmd에서 깃을 실행하는 명령어
+
+
+
+1. 저장소 만들기
+
+	$ clear			# 현재 창을 깨끗하게 비움
+
+	$ mkidr gitfth		# 폴더를 생성
+
+	$ pwd			# 현재 디렉토리 위치 확인
+
+	$ cd gitfth/		# 디렉토리 변경
+
+	$ ls -al		# 현재 디렉토리에 있는 파일 확인
+
+	$ rm -rf 파일명		# 파일을 삭제할때 묻지도않고 따지지도않고 삭제(위험)
+
+	$ git 			# Git에서 사용할 수 있는 명령어들 확인
+
+	$ git init 			# Git으로 버전관리하는 파일을 생성
+	Initialized empty Git repository in D:/Study/4. 빅데이터/9. Git/gitfth/.git/
+
+
+
+2. git이 관리할 대상으로 파일 등록
+
+	$ vim f1.txt		# vim으로 f1.txt파일을 생성(수정)
+		i 누르고 편집
+		:wq으로 저장
+
+	$ cat f1.txt		# f1.txt파일의 내용을 확인
+
+
+	$ git add f1.txt		# f1.txt 파일을 추적하도록 명령
+	warning: LF will be replaced by CRLF in f1.txt.
+	The file will have its original line endings in your working directory
+
+
+	$ git status 		# 프로젝트 폴더의 상태를 확인
+	On branch master
+	
+	No commits yet
+	
+	Changes to be committed:
+	  (use "git rm --cached <file>..." to unstage)
+	
+	        new file:   f1.txt
+
+
+
+
+3.  버전 만들기(commit)
+
+	처음 생성 -> 추적(stage area에 올라감) -> 커밋 -> 수정 -> 추적 -> 커밋
+
+	$ git config --global user.name heaven			# 초기 작성자 닉네임 설정
+
+	$ git config --global user.email wjdtjdgh2005@gmail.com	# 초기 작성자 이메일 설정
+
+	$ git commit			# stage area에 올린 파일을 repository 에 commit
+	[master (root-commit) 5e49af3] 1
+	 1 file changed, 2 insertions(+)
+	 create mode 100644 f1.txt
+
+	$ git log				# 버전의 로그를 보여줌
+	commit 5e49af3a5e157197748d5d51c28c00f1008919ad (HEAD -> master)
+	Author: heaven <wjdtjdgh2005@gmail.com>
+	Date:   Sun May 19 16:41:12 2019 +0900
+	
+	    1
+
+
+
+4. Stage area
+	git = stage -> repository
+	
+	$ cp f1.txt f2.txt			# f1.txt 파일을 f2.txt에 복사함
+
+
+
+
+5. 변경사항 확인하기
+
+	$ git log -p 			# 현재 버전과 이전 버전의 차이점까지 나타나는 로그를 보여줌
+	commit 280a1c414e1c4893992a8d4e5216df1a0b5373ff (HEAD -> master)
+	Author: heaven <wjdtjdgh2005@gmail.com>
+	Date:   Sun May 19 19:21:21 2019 +0900
+	
+	    4
+	
+	diff --git a/f1.txt b/f1.txt
+	index 230fc34..ae93f8d 100644
+	--- a/f1.txt
+	+++ b/f1.txt
+	@@ -1,2 +1,2 @@
+	-source : 2
+	+f1.txt : 4
+
+	$ git log '버전id'			# 고유번호인 버전까지의 로그를 보여줌
+
+	$ git log --oneline			# 로그를 한줄로 보여줌
+
+	$ git log --reverse			# 로그를 반대로 처음부터 보여줌
+
+	$ git diff '버전id'..'버전id'		# 두 버전간의 차이를 보여줌
+
+	$ git diff				# 현재 add하지 않은 파일과 최신 commit된 파일의 차이점을 보여줌
+
+
+
+
+
+6. 과거의 버전으로 돌아가기
+
+	$ git reset '버전id' --hard		# 원하는 버전으로 되돌아감(원격저장소 쓸때 매우 주의)
+
+
+
+
+
+
+7. 명령의 빈도와 메뉴얼 보는 방법 
+
+	$ git commit --help		# commit명령어의 도움말을 보여줌
+
+	$ git commit -a			# add작업 없이 수정된 파일을 새버전으로 commit함
+
+	$ git commit -m "commit message"	# commit 메세지를 에디터 없이 바로 적용
+
+	$ git commit --amend		# 버전이름을 개정할 수 있음
+
+
+
+
+
+8. 수련해봅시다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+■ Git의 원리
+
+9. gistory 설치
+
+	anaconda prompt에서 pip install gistory로 설치
+
+	anaconda prompt를 통해 git bash 실행 --> .git 디렉토리에 들어간 후 gistoy 명령어 실행
+	--> 호스트번호 알아내서 웹에서 localhost:호스트번호 로 gistory실행
+
+
+
+
+10. Git add의 원리
+	
+	add 를 하면
+	인덱스로 파일명을 구분하고 내용이 같은 파일은 같은 objects로 둬서 중복을 제거함
+	고유번호를 이용해서 서로 연결해놓음
+
+
+
+11. objects 파일명의 원리
+
+	add를 치면 파일안의 내용을 확인해서 알아서 압축을 하고 sha1이라는 해시 알고리즘을 통과시켜
+	처음 두글자의 디렉토리안에 나머지 글자의 파일을 생성한다.
+
+
+
+12. commit의 원리
+13. status의 원리
+
+
+
+
+
+
+
+■ Git의 혁신 - branch
+
+14. branch 만들기
+
+	$ git branch 			# branch의 목록을 보여줌
+	* master
+
+
+	$ git branch exp		# 새로운 exp브렌치를 생성
+
+
+	$ git checkout exp		# branch를 전환
+	Switched to branch 'exp'
+
+	$ git branch -d exp		# exp 브렌치를 삭제
+
+	$ git branch -D	exp		# 병합하지않아도 exp branch를 강제 삭제할 때
+
+	$ git checkout -b exp		# 브렌치를 생성하고 전환까지 할 때 
+
+	$ git checkout '커밋 아이디'	# 그 커밋id의 브랜치로 바뀜
+
+	
+	
+15. branch 정보확인
+
+	$ git log --branches --decorate --graph		# 로그에 모든 브렌치, 브렌치명, 그래프를 표현
+
+	$ git log exp..master				# 브렌치 간에 뭐가 다른지 비교
+
+	$ git diff exp..master				# 브렌치 간에 코드를 비교
+
+
+
+16. branch 병합
+
+	$ git merge exp			# 현재 체크아웃된 브렌치로 exp를 병합하겠다.
+					# exp를 가져오는 컨셉임에 주의해야 한다.
+
+
+17. branch 수련
+
+	Git에 대한 공식 메뉴얼을 보려면 git-scm.com에 접속 --> Documentation --> Book
+
+
+
+18. branch 병합 시 충돌 해결
+
+	$ git merge exp
+	Auto-merging common.txt
+	CONFLICT (content): Merge conflict in common.txt
+	Automatic merge failed; fix conflicts and then commit the result.
+
+		# 위와 같이 병합시 comflict가 난다면 충돌한 파일 열어서 수동으로 수정해
+
+	#충돌 파일 내부 모습
+	function b
+	<<<<<<< HEAD		# 병합 주체측의 내용(<<<<로 표시)
+	function a(master)
+	=======			# 충돌이 일어난 위치(====로 표시)
+	function a(exp)
+	>>>>>>> exp		# 병합 객체측의 내용(>>>>로 표시)
+	function c
+
+
+
+
+
+19. stash
+
+	다른 브랜치로 checkout을 해야 하는데 아직 현재 브랜치에서 작업이 끝나지 않은 경우는 커밋을 하기가 
+	애매합니다. 이런 경우 stash를 이용하면 작업중이던 파일을 임시로 저장해두고 현재 브랜치의 상태를 
+	마지막 커밋의 상태로 초기화 할 수 있습니다. 그 후에 다른 브랜치로 이동하고 작업을 끝낸 후에 작업 
+	중이던 브랜치로 복귀한 후에 이전에 작업하던 내용을 복원할 수 있습니다. 여기서는 이 기능에 대해서 
+	알아봅니다.
+
+	$ git stash			# 현재 tracked 되고 있는 파일들을 숨긴다.
+
+	$ git stash apply		# 숨겨져 있는 파일중 0번 파일을 되돌린다.
+					# 순차적으로 되돌린다는 컨셉이 중요
+
+	$ git stash list		# 현재 숨겨져 있는 파일들의 목록을 보여준다
+
+	$ git stash drop		# 숨겨져 있는 파일 목록에서 가장 상위에 있는 파일을 지운다
+
+	$ git stash pop			# apply의 기능과 drop의 기능을 동시에 수행한다.
+
+
+	
+
+
+
+
+
+
+
+
+■ 원격 저장소
+
+	$ git init -bare '폴더명'			# 로컬에 원격 저장소를 만들고 싶을때
+							# (bare는 작업할 수 없고 저장소 역할만 수행)
+
+	$ git remote add origin /e/9.\ Git/remote	# origin이라는 이름으로 원격 저장소 추가
+
+	$ git remote -v					# 원격 저장소의 리스트를 보여줌 ?
+
+	git config --global push.default simple		# git의 설정을, 이 시스템에 전역(global)적으로,
+							# push형식의 simple방식으로 바꾼다는 뜻임
+
+	$ git push --set-upstream origin master		# master브렌치를 origin저장소에 upstream하고 푸시하겠다.
+							# 다음번 부터는 git push만 해도 된다는 뜻?
+							# 로컬저장소와 원격저장소를 명시적으로 연결시키는것
+
+
+
+
+
+
+
+
+■ Github
+
+20. 원격 저장소를 지역 저장소로 복제(Github)
+
+	$ git clone [주소] [저장디렉토리]	# 원격 저장소의 내용을 로컬로 가져옴
+
+
+
+21. 원격 저장소 만들기(Github)
+
+	$ git remote add origin '주소'			# 원격저장소를 추가
+
+	$ git push -u origin master			# 앞으로 현재 브랜치를 원격저장소 origin의 master에 
+							# 동기화하겠다.
+
+	$ git remote remove friend			# 원격저장소로 등록한 friend를 삭제
+
+
+
+22. 원격 저장소와 지역 저장소의 동기화 방법(Github)
+
+	$ git pull					# 현재 연결되어있는 원격저장소의 변경사항을 로드한다.
+							# 다른곳에서 작업할 경우 항상 pull하는 습관을 들여야
+							# 합니다.
+
+
+
+23. 로그인 없이 원격 저징소 이용하기(Github)
