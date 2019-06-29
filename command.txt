@@ -311,6 +311,10 @@ start "" "%PROGRAMFILES%\Git\bin\sh.exe" --login		# cmd에서 깃을 실행하�
 
 ■ Github
 
+	git config --global http.postBuffer 1048576000	# 버퍼 사이즈를 늘려줌
+							# fatal : The remote end hung up unexpactedly 문제시 사용
+	
+
 20. 원격 저장소를 지역 저장소로 복제(Github)
 
 	$ git clone [주소] [저장디렉토리]	# 원격 저장소의 내용을 로컬로 가져옴
