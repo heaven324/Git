@@ -313,6 +313,8 @@ start "" "%PROGRAMFILES%\Git\bin\sh.exe" --login		# cmd에서 깃을 실행하�
 
 	git config --global http.postBuffer 1048576000	# 버퍼 사이즈를 늘려줌
 							# fatal : The remote end hung up unexpactedly 문제시 사용
+
+
 	
 
 20. 원격 저장소를 지역 저장소로 복제(Github)
@@ -341,3 +343,19 @@ start "" "%PROGRAMFILES%\Git\bin\sh.exe" --login		# cmd에서 깃을 실행하�
 
 
 23. 로그인 없이 원격 저징소 이용하기(Github)
+
+
+
+
+
+24. git-lfs 적용
+
+Commit 과정에서 지정한 파일을 작게 조각내주는 Git extension인 git-lfs — Git Large File Storage 
+https://git-lfs.github.com/ — 를 로컬에 설치한 뒤, 적용하려는 Repository 경로에서 다음 명령을 실행한다.
+
+
+	$ git lfs install
+
+그다음 용량이 큰 파일을 git-lfs의 관리 대상으로 등록해준다.
+
+	$ git lfs track "파일명"
